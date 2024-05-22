@@ -1,0 +1,33 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% block title %}
+            
+        {% endblock %}
+    </title>
+    <!-- <link rel="stylesheet" href="{% static 'student/css/style.css' %}"> -->
+    <script src="{% static 'student/js/tailwind.js' %}"></script>
+</head>
+<body>
+    <header>
+        <div class="container mx-auto px-5 py-8 flex items-center justify-between">
+            <div class="w-[80px]">
+                <img src="{% static 'student/img/logo.png' %}" alt="Logo">
+            </div>
+            {% block signin_btn %}
+                <!-- <div class="signin__btn"></div> -->
+            {% endblock %}
+        </div>
+    </header>
+    <main>
+        {% block content %}
+
+        {% endblock %}
+    </main>
+</body>
+</html>

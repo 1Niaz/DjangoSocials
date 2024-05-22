@@ -1,0 +1,108 @@
+{% extends 'student/base.html' %}
+{% load static %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+
+{% block signin_btn %}
+    <div class="bg-blue-500 rounded px-5 h-[35px] flex items-center">
+        <a class="text-white" href="/logout/">Logout</a>
+    </div>
+{% endblock %}
+
+
+
+{% block content %}
+
+<div class="container mx-auto px-5 sm:mt-0 mt-8">
+    <h1 class="md:text-3xl text-2xl font-bold md:text-left text-center">Student List</h1>
+    <div class="my-5 flex md:flex-row flex-col md:gap-10 gap-0 md:items-center justify-between md:px-4 px-2 md:px-10 rounded shadow-lg shadow-gray-400/30">
+        <form method="get" action="" class="flex gap-4 md:flex-row flex-col">
+            <!-- <label for="curator">Curator:</label> -->
+            <div>
+                <select name="curator" id="curator">
+                    <option value="">Кураторы (Все)</option>
+                    {% for curator in curators %}
+                        <option value="{{ curator.nameCurator }}" {% if request.GET.curator == curator.id|stringformat:"s" %}selected{% endif %}>{{ curator.nameCurator }}</option>
+                    {% endfor %}
+                </select>
+            
+                <!-- <label for="group">Group:</label> -->
+                <select name="group" id="group">
+                    <option value="">Группы (Все)</option>
+                    {% for group in groups %}
+                        <option value="{{ group.nameGroup }}" {% if request.GET.group == group.id|stringformat:"s" %}selected{% endif %}>{{ group.nameGroup }}</option>
+                    {% endfor %}
+                </select>
+            
+                <!-- <label for="lang">Language:</label> -->
+                <select name="lang" id="lang">
+                    <option value="">Язык обучения (Все)</option>
+                    {% for code, name in langs %}
+                        <option value="{{ code }}" {% if request.GET.lang == code|stringformat:"s" %}selected{% endif %}>{{ name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="flex gap-2 justify-end">
+                <button class="bg-blue-500 rounded px-5 h-[35px] text-white" type="submit">Найти</button>
+                <button class="bg-blue-500 rounded px-5 h-[35px]">
+                    <a class=" text-white" href="{% url 'index' %}">Сброс</a>
+                </button>
+            </div>
+        </form>
+
+        <!-- <form action="/" method="get">
+            <label for="">Search</label>
+            <input name="fio" type="text" placeholder="Search">
+            <input type="submit" value="Найти">
+        </form> -->
+        <form method="GET" action="/" class="md:my-4 my-14">
+            <div class="flex items-center border-b-2 border-blue-500 py-2">
+                <input type="text" name="fio" class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" placeholder="Поиск..." aria-label="Поиск">
+                <button type="submit" class="flex-shrink-0 bg-blue-500 hover:bg-blue-700 border-blue-500 hover:border-indigo-700 text-sm border-4 text-white py-1 px-2 rounded" type="button">
+                    Поиск
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="container mx-auto px-5 sm:mt-0 mt-8 overflow-scroll">
+
+
+    <table class="w-full text-left shadow-lg shadow-gray-400/30 table-auto">
+        <thead class="">
+            <tr class="bg-blue-500 py-2 px-4 text-white">
+                <th class="px-5 py-2">ФИО</th>
+                <th class="px-5 py-2">Группа</th>
+                <th class="px-5 py-2">Куротор</th>
+                <th class="px-5 py-2">Язык обучения</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in students %}
+                <tr class="bg-gray-100">
+                    <td class="px-5 py-2">{{ student.nameStudent }}</td>
+                    <td class="px-5 py-2">{{ student.groupStudent.nameGroup }}</td>
+                    <td class="px-5 py-2">{{ student.curatorStudent.nameCurator }}</td>
+                    <td class="px-5 py-2">{{ student.get_languageOfStudy_display }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+
+
+{% endblock %}
+
+
+
+
+
+
+
+

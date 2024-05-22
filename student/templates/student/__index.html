@@ -1,0 +1,76 @@
+{% extends 'student/base.html' %}
+{% load static %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+
+{% block signin_btn %}
+    <div class="signin__btn">
+        <a href="/logout/">Logout</a>
+    </div>
+{% endblock %}
+
+
+
+{% block content %}
+    <div class="container">
+        <div class="filter__container">
+            <form  method="GET" >
+                <select name="curator" id="curator">
+                    <option value="">Куратор (Все)</option>
+                    {% for curator in curators %}
+                        <option value="{{ curator.name }}">
+                            {{ curator.nameCurator }} <!-- Assuming you have a name field in CuratorModel -->
+                        </option>
+                    {% endfor %}
+                </select>
+                <select name="group" id="group">
+                    <option value="">Группа (Все)</option>
+                    {% for group in groups %}
+                        <option value="{{ group.name }}">
+                            {{ group.nameGroup }} <!-- Assuming you have a name field in CuratorModel -->
+                        </option>
+                    {% endfor %}
+                </select>
+                <select name="lang" id="lang">
+                    <option value="">Язык (Все)</option>
+                    {% for lang in langs %}
+                        <option value="{{ lang.name }}">
+                            {{ lang.name }} <!-- Assuming you have a name field in CuratorModel -->
+                        </option>
+                    {% endfor %}
+                </select>
+                <button type="submit">Найти</button>
+                <a href="{% url 'index' %}">Сброс</a>
+            </form>
+        </div>
+        <div class="search__container">
+            <div class="search">
+                <form action="/search/" method="get">
+                    <input type="text" placeholder="Поиск" name="">
+                    <button type="submit">Найти</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        {% if students %}
+            {% for student in students %}
+                <div>
+                    {{ student.nameStudent }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endblock %}
+
+
+
+
+
+
+
+

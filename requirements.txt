@@ -1,0 +1,5 @@
+django
+docx
+docxtpl
+django-import_export
+pillow
