@@ -79,6 +79,7 @@
                 <th class="px-5 py-2">Группа</th>
                 <th class="px-5 py-2">Куротор</th>
                 <th class="px-5 py-2">Язык обучения</th>
+                <th class="px-5 py-2"></th>
             </tr>
         </thead>
         <tbody>
@@ -88,6 +89,9 @@
                     <td class="px-5 py-2">{{ student.groupStudent.nameGroup }}</td>
                     <td class="px-5 py-2">{{ student.curatorStudent.nameCurator }}</td>
                     <td class="px-5 py-2">{{ student.get_languageOfStudy_display }}</td>
+                    <td class="px-5 py-2">
+                        <a class="bg-blue-500 rounded text-white py-1 px-3" href="{{ student.id }}/download_docx">Скачать</a>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>

@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from docx import Document
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
 import os
 from django.conf import settings
 from docxtpl import DocxTemplate
@@ -11,7 +12,7 @@ from django.db.models import Q
 
 # from django.contrib.auth.hashers import check_password
 # from django.contrib import messages
-# from django.contrib.auth.models import User, auth
+from django.contrib.auth.models import User
 # from django.contrib.auth.decorators import login_required
 
 from django.contrib.auth import authenticate, login, logout as auth_logout
@@ -44,22 +45,56 @@ from directory.models import *
 
 
 
+# @csrf_protect
+# def signin(request):
+#     if request.method == 'POST':
+#         username = request.POST.get('username')
+#         password = request.POST.get('password')
+#         user = authenticate(request, username=username, password=password)
+#         print(user)
+
+#         if user is not None:
+#             print(user)
+#             login(request, user)
+#             return redirect('/')
+#         else:
+#             return render(request, 'student/signin.html', { 'error_message': 'Invalid username or password' })
+#     else:
+#         return render(request, 'student/signin.html')
+
+
+
+
+
 @csrf_protect
 def signin(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
+        
+        # Отладочная информация
+        print(f"Received POST with username: {username} and password: {password}")
+
+        # Проверка, существует ли пользователь с таким именем пользователя
+        if not User.objects.filter(username=username).exists():
+            print("User does not exist")
+            return render(request, 'student/signin.html', {'error_message': 'Invalid username or password'})
+        
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
             login(request, user)
-            return redirect('')
+            print("User authenticated and logged in")
+            return redirect('/')
         else:
-            return render(request, 'student/signin.html', { 'error_message': 'Invalid username or password' })
+            print("Authentication failed")
+            return render(request, 'student/signin.html', {'error_message': 'Invalid username or password'})
     else:
         return render(request, 'student/signin.html')
 
 
+
+# @login_required(login_url='signin')
 def logout(request):
     auth_logout(request)
     return redirect('signin')
@@ -67,23 +102,13 @@ def logout(request):
 
 
 
-# def index(request):
-#     students = StudentModel.objects.all()
-    
-#     context = {
-#         'students': students,
-#     }
-#     return render(request, 'student/index.html', context)
 
-
-# views.py
+@login_required(login_url='signin')
 def index(request):
     students = StudentModel.objects.all()
     groups = GroupModel.objects.all()
     curators = CuratorModel.objects.all()
     langs = StudentModel.LANGUAGE_CHOICES
-
-    # lang = ['kz', 'ru', 'en']
 
     curator_id = request.GET.get('curator')
     if curator_id:
